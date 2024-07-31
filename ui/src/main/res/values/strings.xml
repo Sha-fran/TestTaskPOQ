@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name_of_repository">Name of repository:</string>
+    <string name="description_of_repository">Description of repository:</string>
+</resources>
