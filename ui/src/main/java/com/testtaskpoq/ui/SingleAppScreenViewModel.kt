@@ -26,6 +26,14 @@ class SingleAppScreenViewModel @Inject constructor(
     }
 
     fun getListOfRepositories() {
+        if(!listOfOrganisationsState.value.loaderState) {
+            _listOfOrganisationsState.update {
+                it.copy(
+                    errorState = false,
+                    loaderState = true
+                )
+            }
+        }
 
         viewModelScope.launch(dispatcherProvider.io) {
             try {

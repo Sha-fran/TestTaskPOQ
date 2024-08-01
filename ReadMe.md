@@ -14,8 +14,9 @@ repositories in the scrollable list using favorite architecture approach
 
 I've created 3 main layers (MVVM approach):
 
-- UI (Presentation): with Screen on Jetpack Compose and ViewModel which depends from Domain
-- Domain: with UseCase and needed entity
+- UI (Presentation): with Screen on Jetpack Compose, ViewModel which depends from Domain and tests
+  for a ViewModel
+- Domain: with UseCase, needed entity, interface of the Repository and tests for a UseCase
 - Data: which depends from Domain and with a repository where app is getting information from the
   server and map it into the entity
 
@@ -23,9 +24,9 @@ And Core module which provides useful reusable data and can be connected to any 
 
 # Tests
 
-I've created example of the tests for a UseCase with using library Mockito and for a ViewModel -
-with MockK
+I've created example of the tests for with using Mockito and MockK libraries
 
 # Opportunities
+
 We can add a local DB (Room, Realm) for saving coming data in the device memory, if needed.
 Create single source of all sizes, colors etc and move it into the core module.
