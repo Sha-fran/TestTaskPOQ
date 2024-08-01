@@ -2,4 +2,5 @@
 <resources>
     <string name="name_of_repository">Name of repository:</string>
     <string name="description_of_repository">Description of repository:</string>
+    <string name="failed_to_fetch_repositories">Failed to fetch repositories</string>
 </resources>

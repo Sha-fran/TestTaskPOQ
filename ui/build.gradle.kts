@@ -51,13 +51,25 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation (libs.mockk)
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation (libs.turbine)
+    testImplementation (libs.junit)
+    testImplementation (libs.androidx.core.testing)
+    testImplementation (libs.mockito.mockito.core)
+    testImplementation (libs.mockito.kotlin)
+    testImplementation (libs.kotlin.test)
+    testImplementation (libs.androidx.core.testing)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$1.4.0")
+    testImplementation (libs.mockito.mockito.inline)
 
     //Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
     implementation(libs.ui.tooling.preview)
-    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     //Hilt
     implementation(libs.hilt)
