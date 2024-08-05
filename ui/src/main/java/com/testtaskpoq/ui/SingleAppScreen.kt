@@ -20,12 +20,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.testtaskpoq.ui.components.ErrorStateComponent
 import com.testtaskpoq.ui.components.ItemCard
 import com.testtaskpoq.ui.components.POQLoader
+import com.testtaskpoq.ui.states.SingleAppScreenUiState
 
 @Composable
 fun SingleAppScreen(
     singleAppScreenViewModel: SingleAppScreenViewModel = hiltViewModel()
 ) {
-    val uiState by singleAppScreenViewModel.listOfOrganisationsState.collectAsState()
+    val uiState by singleAppScreenViewModel.listOfReposState.collectAsState()
 
     Surface(
         color = Color.White
@@ -35,26 +36,32 @@ fun SingleAppScreen(
         ) { paddingValues ->
             Spacer(modifier = Modifier.padding(paddingValues))
 
-            if (uiState.loaderState) {
-                POQLoader()
-            }
+            when (uiState) {
+                is SingleAppScreenUiState.Loading -> {
+                    POQLoader()
+                }
 
-            if (!uiState.errorState) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 32.dp, horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    itemsIndexed(uiState.listOfOrganisations) { _, organisation ->
-                        ItemCard(
-                            name = organisation.nameOfOrganisation,
-                            description = organisation.descriptionOfOrganisation
-                        )
+                is SingleAppScreenUiState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentPadding = PaddingValues(vertical = 32.dp, horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        itemsIndexed((uiState as SingleAppScreenUiState.Success).listOfRepos) { _, repos ->
+                            ItemCard(
+                                name = repos.nameOfRepo,
+                                description = repos.descriptionOfRepo
+                            )
+                        }
                     }
                 }
-            } else {
-                ErrorStateComponent(onClick = { singleAppScreenViewModel.getListOfRepositories() })
+
+                is SingleAppScreenUiState.Error -> {
+                    ErrorStateComponent(
+                        onClick = { singleAppScreenViewModel.getListOfRepositories() }
+                    )
+                }
             }
         }
     }

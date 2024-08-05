@@ -1,7 +1,7 @@
 package com.testtaskpoq.domain.di
 
-import com.testtaskpoq.domain.GetListOfOrganisationsUseCase
-import com.testtaskpoq.domain.repositories.ListOfOrganisationsRepository
+import com.testtaskpoq.domain.GetListOfReposUseCase
+import com.testtaskpoq.domain.repositories.ListOfReposRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ object POQTestTaskDomainModule {
 
     @Singleton
     @Provides
-    fun provideGetListOfOrganisationsUseCase(repository: ListOfOrganisationsRepository): GetListOfOrganisationsUseCase {
-        return GetListOfOrganisationsUseCase(repository)
+    fun provideGetListOfReposUseCase(repository: ListOfReposRepository): GetListOfReposUseCase {
+        return GetListOfReposUseCase(repository)
     }
 }

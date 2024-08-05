@@ -1,8 +1,8 @@
 package com.testtaskpoq.ui
 
 import com.testtaskpoq.core.network.di.DispatcherProvider
-import com.testtaskpoq.domain.GetListOfOrganisationsUseCase
-import com.testtaskpoq.domain.entity.ListOfOrganisationsEntity
+import com.testtaskpoq.domain.GetListOfReposUseCase
+import com.testtaskpoq.domain.entity.ListOfReposEntity
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -14,12 +14,13 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class SingleAppScreenViewModelTest {
     @MockK
-    private lateinit var getListOfOrganisationsUseCase: GetListOfOrganisationsUseCase
+    private lateinit var getListOfReposUseCase: GetListOfReposUseCase
 
     @MockK
     private lateinit var dispatcherProvider: DispatcherProvider
@@ -38,7 +39,7 @@ class SingleAppScreenViewModelTest {
         coEvery { dispatcherProvider.io } returns testDispatcher
         coEvery { dispatcherProvider.default } returns testDispatcher
 
-        viewModel = SingleAppScreenViewModel(getListOfOrganisationsUseCase, dispatcherProvider)
+        viewModel = SingleAppScreenViewModel(getListOfReposUseCase, dispatcherProvider)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -49,58 +50,54 @@ class SingleAppScreenViewModelTest {
 
     @Test
     fun when_response_is_successful_loader_is_hidden_and_error_is_not_shown() = runTest {
-        val sampleOrganisations = listOf(
-            ListOfOrganisationsEntity("Org1", "Description1"),
-            ListOfOrganisationsEntity("Org2", "Description2")
+        val sampleRepos = listOf(
+            ListOfReposEntity("Org1", "Description1"),
+            ListOfReposEntity("Org2", "Description2")
         )
-        coEvery { getListOfOrganisationsUseCase.getListOfOrganisations() } returns sampleOrganisations
+        coEvery { getListOfReposUseCase.getListOfRepos() } returns sampleRepos
 
         viewModel.getListOfRepositories()
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        val state = viewModel.listOfOrganisationsState.value
-        assert(state.listOfOrganisations == sampleOrganisations)
-        assert(!state.errorState)
-        assert(!state.loaderState)
+        val state = viewModel.listOfReposState.value
+        assertEquals(state.listOfRepos, sampleRepos)
+        assert(!state.isError)
+        assert(!state.isLoaderActive)
     }
 
     @Test
     fun when_response_fails_error_is_shown_and_loader_is_hidden() = runTest {
-        coEvery { getListOfOrganisationsUseCase.getListOfOrganisations() } throws Exception("Network error")
+        coEvery { getListOfReposUseCase.getListOfRepos() } throws Exception("Network error")
 
         viewModel.getListOfRepositories()
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        val state = viewModel.listOfOrganisationsState.value
-        assert(state.listOfOrganisations.isEmpty())
-        assert(state.errorState)
-        assert(!state.loaderState)
+        val state = viewModel.listOfReposState.value
+        assert(state.listOfRepos.isEmpty())
+        assert(state.isError)
+        assert(!state.isLoaderActive)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun loader_is_shown_while_fetching_data() = runTest {
-        val sampleOrganisations = listOf(ListOfOrganisationsEntity("Org1", "Description1"))
+        val sampleRepos = listOf(ListOfReposEntity("Org1", "Description1"))
 
-        coEvery { getListOfOrganisationsUseCase.getListOfOrganisations() } coAnswers {
+        coEvery { getListOfReposUseCase.getListOfRepos() } coAnswers {
             delay(1000)
-            sampleOrganisations
+            sampleRepos
         }
 
         viewModel.getListOfRepositories()
 
-        assert(viewModel.listOfOrganisationsState.value.loaderState)
-
-        testDispatcher.scheduler.advanceTimeBy(500)
-        assert(viewModel.listOfOrganisationsState.value.loaderState)
+        assert(viewModel.listOfReposState.value.isLoaderActive)
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        val finalState = viewModel.listOfOrganisationsState.value
-        assert(finalState.listOfOrganisations == sampleOrganisations)
-        assert(!finalState.errorState)
-        assert(!finalState.loaderState)
+        val state = viewModel.listOfReposState.value
+        assertEquals(state.listOfRepos, sampleRepos)
+        assert(!state.isError)
+        assert(!state.isLoaderActive)
     }
 }

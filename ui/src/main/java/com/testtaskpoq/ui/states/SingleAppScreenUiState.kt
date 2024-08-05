@@ -1,9 +1,9 @@
 package com.testtaskpoq.ui.states
 
-import com.testtaskpoq.domain.entity.ListOfOrganisationsEntity
+import com.testtaskpoq.domain.entity.ListOfReposEntity
 
-data class SingleAppScreenUiState(
-    val listOfOrganisations: List<ListOfOrganisationsEntity> = listOf(),
-    val errorState: Boolean = false,
-    val loaderState: Boolean = true
-)
+sealed class SingleAppScreenUiState {
+    data object Loading : SingleAppScreenUiState()
+    data class Success(val listOfRepos: List<ListOfReposEntity>) : SingleAppScreenUiState()
+    data object Error : SingleAppScreenUiState()
+}

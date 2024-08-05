@@ -9,6 +9,8 @@ repositories in the scrollable list using favorite architecture approach
 ## Features
 
 - only one feature - displaying scrollable list of name and description of repositories
+- in case of many features instead of ui module I will create a catalogue "feature" where place all
+  feature modules
 
 # Architecture
 
@@ -24,7 +26,7 @@ And Core module which provides useful reusable data and can be connected to any 
 
 # Tests
 
-I've created example of the tests for with using Mockito and MockK libraries
+I've created example of the tests for with using MockK library
 
 # Opportunities
 
